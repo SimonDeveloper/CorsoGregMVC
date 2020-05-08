@@ -49,9 +49,17 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -150,11 +158,40 @@
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\FilterConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
+    <Compile Include="Controllers\ApplicativiController.vb" />
+    <Compile Include="Models\ApplicativoViewModel.vb" />
     <Compile Include="Controllers\DipendenteController.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CronologiaSessioni.vb">
+      <DependentUpon>P2K.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DipendenteViewModel.vb" />
+    <Compile Include="Models\Direttive.vb">
+      <DependentUpon>P2K.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Logs.vb">
+      <DependentUpon>P2K.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P2K.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>P2K.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P2K.Fwk.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>P2K.Fwk.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P2K.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>P2K.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Procedure.vb">
+      <DependentUpon>P2K.tt</DependentUpon>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -194,6 +231,13 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <EntityDeploy Include="Models\P2K.Fwk.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>P2K.Fwk.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\P2K.Fwk.edmx.diagram">
+      <DependentUpon>P2K.Fwk.edmx</DependentUpon>
+    </Content>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -205,6 +249,16 @@
     </None>
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Models\P2K.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>P2K.Context.vb</LastGenOutput>
+      <DependentUpon>P2K.Fwk.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\P2K.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>P2K.Fwk.edmx</DependentUpon>
+      <LastGenOutput>P2K.vb</LastGenOutput>
+    </Content>
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -215,6 +269,7 @@
     <Content Include="Views\Home\IlMilBelMetodoBindato1.vbhtml" />
     <Content Include="Views\Home\IlMilBelMetodoBindatoNomeDiverso.vbhtml" />
     <Content Include="Views\Dipendente\Anagrafica.vbhtml" />
+    <Content Include="Views\Applicativi\Index.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -245,6 +300,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

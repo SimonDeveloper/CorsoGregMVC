@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Progetto2000.COREModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CronologiaSessioni">
+          <Key>
+            <PropertyRef Name="IDSessione" />
+          </Key>
+          <Property Name="IDSessione" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDLog" Type="int" />
+          <Property Name="GuidSessione" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DataOraEsecuzione" Type="datetime" Nullable="false" />
+          <Property Name="TotaleErrori" Type="int" Nullable="false" />
+          <Property Name="TotaleWarnings" Type="int" Nullable="false" />
+          <Property Name="SavePath" Type="nvarchar" MaxLength="400" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="IDLogTestata" />
+          </Key>
+          <Property Name="IDLogTestata" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDProcedura" Type="int" Nullable="false" />
+          <Property Name="IDEsitoUltimaEsecuzione" Type="int" Nullable="false" />
+          <Property Name="DataOraUltimaEsecuzione" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Direttive">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="direttiva_aggiornamenti" Type="varchar" MaxLength="255" />
+          <Property Name="direttiva_programmi" Type="varchar" MaxLength="255" />
+          <Property Name="direttiva_dll" Type="varchar" MaxLength="255" />
+          <Property Name="dominioImpersonation" Type="varchar" MaxLength="50" />
+          <Property Name="userImpersonation" Type="varchar" MaxLength="50" />
+          <Property Name="passImpersonation" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Procedure">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCliente" Type="int" />
+          <Property Name="iddirettiva" Type="int" />
+          <Property Name="DescrizioneProgramma" Type="varchar" MaxLength="50" />
+          <Property Name="subdirectory" Type="varchar" MaxLength="50" />
+          <Property Name="DescrizioneAssembly" Type="varchar" MaxLength="50" />
+          <Property Name="annullato" Type="int" />
+          <Property Name="Note" Type="varchar" MaxLength="255" />
+          <Property Name="old_collegamento" Type="varchar" MaxLength="255" />
+          <Property Name="visibile" Type="int" />
+        </EntityType>
+        <Association Name="FK_CronologiaSessioni_Logs">
+          <End Role="Logs" Type="Self.Logs" Multiplicity="0..1" />
+          <End Role="CronologiaSessioni" Type="Self.CronologiaSessioni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Logs">
+              <PropertyRef Name="IDLogTestata" />
+            </Principal>
+            <Dependent Role="CronologiaSessioni">
+              <PropertyRef Name="IDLog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logs_Procedure">
+          <End Role="Procedure" Type="Self.Procedure" Multiplicity="1" />
+          <End Role="Logs" Type="Self.Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Procedure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Logs">
+              <PropertyRef Name="IDProcedura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Procedure_DIRETTIVE">
+          <End Role="Direttive" Type="Self.Direttive" Multiplicity="0..1" />
+          <End Role="Procedure" Type="Self.Procedure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direttive">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Procedure">
+              <PropertyRef Name="iddirettiva" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Progetto2000COREModelStoreContainer">
+          <EntitySet Name="CronologiaSessioni" EntityType="Self.CronologiaSessioni" Schema="Logger" store:Type="Tables" />
+          <EntitySet Name="Logs" EntityType="Self.Logs" Schema="Logger" store:Type="Tables" />
+          <EntitySet Name="Direttive" EntityType="Self.Direttive" Schema="Menu" store:Type="Tables" />
+          <EntitySet Name="Procedure" EntityType="Self.Procedure" Schema="Menu" store:Type="Tables" />
+          <AssociationSet Name="FK_CronologiaSessioni_Logs" Association="Self.FK_CronologiaSessioni_Logs">
+            <End Role="Logs" EntitySet="Logs" />
+            <End Role="CronologiaSessioni" EntitySet="CronologiaSessioni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logs_Procedure" Association="Self.FK_Logs_Procedure">
+            <End Role="Procedure" EntitySet="Procedure" />
+            <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Procedure_DIRETTIVE" Association="Self.FK_Procedure_DIRETTIVE">
+            <End Role="Direttive" EntitySet="Direttive" />
+            <End Role="Procedure" EntitySet="Procedure" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Progetto2000.COREModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CronologiaSessioni">
+          <Key>
+            <PropertyRef Name="IDSessione" />
+          </Key>
+          <Property Name="IDSessione" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GuidSessione" Type="Guid" Nullable="false" />
+          <Property Name="DataOraEsecuzione" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotaleErrori" Type="Int32" Nullable="false" />
+          <Property Name="TotaleWarnings" Type="Int32" Nullable="false" />
+          <Property Name="SavePath" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Logs" Relationship="Self.FK_CronologiaSessioni_Logs" FromRole="CronologiaSessioni" ToRole="Logs" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="IDLogTestata" />
+          </Key>
+          <Property Name="IDLogTestata" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDEsitoUltimaEsecuzione" Type="Int32" Nullable="false" />
+          <Property Name="DataOraUltimaEsecuzione" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CronologiaSessioni" Relationship="Self.FK_CronologiaSessioni_Logs" FromRole="Logs" ToRole="CronologiaSessioni" />
+          <NavigationProperty Name="Procedure" Relationship="Self.FK_Logs_Procedure" FromRole="Logs" ToRole="Procedure" />
+        </EntityType>
+        <EntityType Name="Direttive">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="direttiva_aggiornamenti" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="direttiva_programmi" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="direttiva_dll" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="dominioImpersonation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="userImpersonation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="passImpersonation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Procedure" Relationship="Self.FK_Procedure_DIRETTIVE" FromRole="Direttive" ToRole="Procedure" />
+        </EntityType>
+        <EntityType Name="Procedure">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCliente" Type="Int32" />
+          <Property Name="DescrizioneProgramma" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="subdirectory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DescrizioneAssembly" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="annullato" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="old_collegamento" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="visibile" Type="Int32" />
+          <NavigationProperty Name="Logs" Relationship="Self.FK_Logs_Procedure" FromRole="Procedure" ToRole="Logs" />
+          <NavigationProperty Name="Direttive" Relationship="Self.FK_Procedure_DIRETTIVE" FromRole="Procedure" ToRole="Direttive" />
+        </EntityType>
+        <Association Name="FK_CronologiaSessioni_Logs">
+          <End Role="Logs" Type="Self.Logs" Multiplicity="0..1" />
+          <End Role="CronologiaSessioni" Type="Self.CronologiaSessioni" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Logs_Procedure">
+          <End Role="Procedure" Type="Self.Procedure" Multiplicity="1" />
+          <End Role="Logs" Type="Self.Logs" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Procedure_DIRETTIVE">
+          <End Role="Direttive" Type="Self.Direttive" Multiplicity="0..1" />
+          <End Role="Procedure" Type="Self.Procedure" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="FrameworkEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CronologiaSessioni" EntityType="Self.CronologiaSessioni" />
+          <EntitySet Name="Logs" EntityType="Self.Logs" />
+          <EntitySet Name="Direttive" EntityType="Self.Direttive" />
+          <EntitySet Name="Procedure" EntityType="Self.Procedure" />
+          <AssociationSet Name="FK_CronologiaSessioni_Logs" Association="Self.FK_CronologiaSessioni_Logs">
+            <End Role="Logs" EntitySet="Logs" />
+            <End Role="CronologiaSessioni" EntitySet="CronologiaSessioni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logs_Procedure" Association="Self.FK_Logs_Procedure">
+            <End Role="Procedure" EntitySet="Procedure" />
+            <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Procedure_DIRETTIVE" Association="Self.FK_Procedure_DIRETTIVE">
+            <End Role="Direttive" EntitySet="Direttive" />
+            <End Role="Procedure" EntitySet="Procedure" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Progetto2000COREModelStoreContainer" CdmEntityContainer="FrameworkEntities">
+          <EntitySetMapping Name="CronologiaSessioni">
+            <EntityTypeMapping TypeName="Progetto2000.COREModel.CronologiaSessioni">
+              <MappingFragment StoreEntitySet="CronologiaSessioni">
+                <ScalarProperty Name="IDSessione" ColumnName="IDSessione" />
+                <ScalarProperty Name="GuidSessione" ColumnName="GuidSessione" />
+                <ScalarProperty Name="DataOraEsecuzione" ColumnName="DataOraEsecuzione" />
+                <ScalarProperty Name="TotaleErrori" ColumnName="TotaleErrori" />
+                <ScalarProperty Name="TotaleWarnings" ColumnName="TotaleWarnings" />
+                <ScalarProperty Name="SavePath" ColumnName="SavePath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="Progetto2000.COREModel.Logs">
+              <MappingFragment StoreEntitySet="Logs">
+                <ScalarProperty Name="IDLogTestata" ColumnName="IDLogTestata" />
+                <ScalarProperty Name="IDEsitoUltimaEsecuzione" ColumnName="IDEsitoUltimaEsecuzione" />
+                <ScalarProperty Name="DataOraUltimaEsecuzione" ColumnName="DataOraUltimaEsecuzione" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Direttive">
+            <EntityTypeMapping TypeName="Progetto2000.COREModel.Direttive">
+              <MappingFragment StoreEntitySet="Direttive">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="direttiva_aggiornamenti" ColumnName="direttiva_aggiornamenti" />
+                <ScalarProperty Name="direttiva_programmi" ColumnName="direttiva_programmi" />
+                <ScalarProperty Name="direttiva_dll" ColumnName="direttiva_dll" />
+                <ScalarProperty Name="dominioImpersonation" ColumnName="dominioImpersonation" />
+                <ScalarProperty Name="userImpersonation" ColumnName="userImpersonation" />
+                <ScalarProperty Name="passImpersonation" ColumnName="passImpersonation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Procedure">
+            <EntityTypeMapping TypeName="Progetto2000.COREModel.Procedure">
+              <MappingFragment StoreEntitySet="Procedure">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="DescrizioneProgramma" ColumnName="DescrizioneProgramma" />
+                <ScalarProperty Name="subdirectory" ColumnName="subdirectory" />
+                <ScalarProperty Name="DescrizioneAssembly" ColumnName="DescrizioneAssembly" />
+                <ScalarProperty Name="annullato" ColumnName="annullato" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="old_collegamento" ColumnName="old_collegamento" />
+                <ScalarProperty Name="visibile" ColumnName="visibile" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_CronologiaSessioni_Logs" TypeName="Progetto2000.COREModel.FK_CronologiaSessioni_Logs" StoreEntitySet="CronologiaSessioni">
+            <EndProperty Name="Logs">
+              <ScalarProperty Name="IDLogTestata" ColumnName="IDLog" />
+            </EndProperty>
+            <EndProperty Name="CronologiaSessioni">
+              <ScalarProperty Name="IDSessione" ColumnName="IDSessione" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="IDLog" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Logs_Procedure" TypeName="Progetto2000.COREModel.FK_Logs_Procedure" StoreEntitySet="Logs">
+            <EndProperty Name="Procedure">
+              <ScalarProperty Name="id" ColumnName="IDProcedura" />
+            </EndProperty>
+            <EndProperty Name="Logs">
+              <ScalarProperty Name="IDLogTestata" ColumnName="IDLogTestata" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_Procedure_DIRETTIVE" TypeName="Progetto2000.COREModel.FK_Procedure_DIRETTIVE" StoreEntitySet="Procedure">
+            <EndProperty Name="Direttive">
+              <ScalarProperty Name="id" ColumnName="iddirettiva" />
+            </EndProperty>
+            <EndProperty Name="Procedure">
+              <ScalarProperty Name="id" ColumnName="id" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="iddirettiva" />
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

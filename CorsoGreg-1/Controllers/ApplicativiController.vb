@@ -34,7 +34,7 @@ Namespace Controllers
                 whereClause = $" WHERE {whereClause}"
             End If
             Using db As New FrameworkEntities
-                ret = db.Database.SqlQuery(Of ApplicativoViewModel)($"select * from Menu.Procedure {whereClause}").ToList()
+                ret = db.Database.SqlQuery(Of ApplicativoViewModel)($"select * from Menu.[Procedure] {whereClause}").ToList()
             End Using
             Return ret
         End Function
